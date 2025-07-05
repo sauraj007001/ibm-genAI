@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Resume Generator open.AI</title>
+  <style>
+    :root {
+      --bg-light: #ffffff;
+      --text-light: #222222;
+      --bg-dark: #0c0b14;
+      --text-dark: #ffffff;
+      --highlight: #ffcc00;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background-color: inherit;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    h1.title {
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 10px;
+      position: relative;
+    }
+
+    h1.title::after {
+      content: '|';
+      position: absolute;
+      right: 0;
+      animation: typing 4s steps(20, end) forwards, blink 1s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 100%; }
+      to { width: 0; }
+    }
+
+    @keyframes blink {
+      50% { color: transparent; }
+    }
+
+    h2.subtitle {
+      text-align: center;
+      font-weight: normal;
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section h2 {
+      font-size: 22px;
+      color: var(--highlight);
+      margin-bottom: 5px;
+    }
+
+    .section p {
+      font-size: 18px;
+      line-height: 1.6;
+    }
+
+    .controls {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .controls button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .controls button:hover {
+      background-color: #0056b3;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 15px;
+      }
+
+      h1.title {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="controls">
+    <button onclick="toggleTheme()">Toggle Theme</button>
+    <button onclick="window.print()">Print Resume</button>
+  </div>
+
+  <div class="container" id="resumeContainer">
+    <h1 class="title">Resume Builder open.AI</h1>
+    <h2 class="subtitle">version 0.2</h2>
+  </div>
+
+  <script>
+    const container = document.getElementById("resumeContainer");
+    const ask = (msg) => prompt(msg) || "N/A";
+
+    const name = ask("Enter your full name:");
+    const address = ask("Enter your address:");
+    const phone = ask("Enter your phone number:");
+    const email = ask("Enter your Email ID:");
+    const university = ask("Enter your university name:");
+    const lang = ask("Enter other programming languages you're skilled in:");
+    const project = ask("Enter your project name:");
+    const experience = ask("Enter your work experience:");
+
+    const skillsPythonJava = ask("1) Python 2) Java 3) Both 4) None\nSelect your skills:");
+    const skillsC = ask("1) C 2) C++ 3) Both 4) None\nSelect your skills:");
+    const workType = ask("1) Freelancing 2) Web Development 3) Both 4) None\nSelect your work domain:");
+
+    const skillTexts = {
+      1: "I am proficient in the Python programming language...",
+      2: "I am proficient in the Java programming language...",
+      3: "I am proficient in both Python and Java...",
+    };
+
+    const cSkillTexts = {
+      1: "I am proficient in the C programming language...",
+      2: "I am proficient in the C++ programming language...",
+      3: "I am proficient in both C and C++...",
+    };
+
+    const workTexts = {
+      1: "I work as a freelancer on various projects...",
+      2: "I work as a web developer specializing in websites...",
+      3: "I work both as a freelancer and a web developer...",
+    };
+
+    let html = `
+      <div class="section"><h2>Full Name:</h2><p>${name}</p></div>
+      <div class="section"><h2>Address:</h2><p>${address}</p></div>
+      <div class="section"><h2>Phone Number:</h2><p>${phone}</p></div>
+      <div class="section"><h2>Email ID:</h2><p>${email}</p></div>
+      <div class="section"><h2>Objective:</h2>
+        <p>Highly motivated computer science student seeking an internship to apply and further develop my technical skills in software development and gain real-world industry experience.</p>
+      </div>
+      <div class="section"><h2>Education:</h2>
+        <p>Bachelor of Science in Computer Science<br>University: ${university}</p>
+      </div>
+    `;
+
+    if (skillsPythonJava >= 1 && skillsPythonJava <= 3)
+      html += `<div class="section"><h2>Languages & Technologies:</h2><p>${skillTexts[skillsPythonJava]}</p></div>`;
+
+    if (skillsC >= 1 && skillsC <= 3)
+      html += `<div class="section"><h2>C/C++ Skills:</h2><p>${cSkillTexts[skillsC]}</p></div>`;
+
+    if (workType >= 1 && workType <= 3)
+      html += `<div class="section"><h2>Work Profile:</h2><p>${workTexts[workType]}</p></div>`;
+
+    html += `
+      <div class="section"><h2>Other Programming Languages:</h2><p>${lang}</p></div>
+      <div class="section"><h2>Projects:</h2><p>${project}</p></div>
+      <div class="section"><h2>Work Experience:</h2><p>${experience}</p></div>
+      <div class="section"><h2>Note:</h2><p>Thank you for reviewing my resume. I am available upon request.</p></div>
+    `;
+
+    container.innerHTML += html;
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark-mode");
+    }
+  </script>
+</body>
+</html>
